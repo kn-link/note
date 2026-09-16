@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>実戦振り返りノート｜自分のボクシングを、自分で磨く</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#E5E1D6;
+  --card:#FCFBF7;
+  --ink:#1A1A17;
+  --ink-soft:#5C5A51;
+  --rule:#C2BCAC;
+  --rule-hard:#1A1A17;
+  --red:#A62F27;
+  --blue:#1C4A70;
+  --field:#FFFFFF;
+  --field-line:#D6D0BF;
+  --focus:#1C4A70;
+}
+:root:not([data-theme="light"]){
+  @media (prefers-color-scheme: dark){
+    --paper:#171815;
+    --card:#1F201C;
+    --ink:#E9E5DA;
+    --ink-soft:#9B978A;
+    --rule:#3D3E38;
+    --rule-hard:#E9E5DA;
+    --red:#D9584E;
+    --blue:#6FA6D4;
+    --field:#26271F;
+    --field-line:#45463E;
+    --focus:#6FA6D4;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#171815;
+  --card:#1F201C;
+  --ink:#E9E5DA;
+  --ink-soft:#9B978A;
+  --rule:#3D3E38;
+  --rule-hard:#E9E5DA;
+  --red:#D9584E;
+  --blue:#6FA6D4;
+  --field:#26271F;
+  --field-line:#45463E;
+  --focus:#6FA6D4;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",system-ui,sans-serif;
+  font-weight:400;
+  line-height:1.75;
+  font-feature-settings:"palt" 1;
+}
+.sheet{
+  max-width:44rem;
+  margin:0 auto;
+  background:var(--card);
+  border-left:1px solid var(--rule);
+  border-right:1px solid var(--rule);
+  padding:0 clamp(1.1rem,4vw,2.6rem) 4rem;
+}
+
+/* ---------- hero ---------- */
+.hero{padding:clamp(2.4rem,7vw,4rem) 0 1.6rem}
+.corner{
+  display:flex;align-items:center;gap:.55rem;
+  font-size:.82rem;font-weight:700;letter-spacing:.04em;color:var(--ink-soft);
+  margin-bottom:1.5rem;
+}
+.corner i{width:.62rem;height:.62rem;border-radius:50%;display:block}
+.corner i:first-child{background:var(--red)}
+.corner i:nth-child(2){background:var(--blue)}
+h1{
+  font-size:clamp(1.95rem,7.2vw,3.15rem);
+  font-weight:900;line-height:1.2;letter-spacing:-.02em;
+  margin:0 0 .6rem;
+}
+.sub-title{font-size:1.15rem;font-weight:700;margin:0 0 1.1rem;letter-spacing:-.01em}
+.lede{font-size:1.02rem;color:var(--ink-soft);max-width:34rem;margin:0 0 1.9rem}
+.first-rule{
+  border:2px solid var(--rule-hard);
+  padding:1rem 1.15rem;
+  font-weight:700;font-size:1.02rem;line-height:1.7;
+}
+.first-rule span{color:var(--red)}
+
+/* ---------- sections ---------- */
+section{border-top:2px solid var(--rule-hard);padding:2.3rem 0 .4rem;margin-top:2.6rem}
+h2{font-size:1.32rem;font-weight:900;letter-spacing:-.01em;margin:0 0 .5rem}
+.note{font-size:.92rem;color:var(--ink-soft);margin:0 0 1.6rem;max-width:33rem}
+
+.q{margin-bottom:1.55rem}
+.q label{display:block;font-weight:700;font-size:1rem;margin-bottom:.5rem}
+.q .hint{display:block;font-weight:400;font-size:.86rem;color:var(--ink-soft);margin-top:.15rem}
+textarea,input[type=text],input[type=date],select{
+  width:100%;font-family:inherit;font-size:1rem;line-height:1.7;color:var(--ink);
+  background:var(--field);
+  border:1px solid var(--field-line);border-radius:2px;
+  padding:.65rem .75rem;resize:vertical;
+}
+select{padding:.6rem .7rem}
+input[type=date]{padding:.55rem .7rem;font-variant-numeric:tabular-nums}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(9.5rem,1fr));gap:0 1rem}
+.meta .q{margin-bottom:1.2rem}
+textarea{min-height:4.2rem}
+textarea:focus,input:focus,select:focus{outline:2px solid var(--focus);outline-offset:1px;border-color:transparent}
+.opt{
+  font-size:.74rem;font-weight:700;color:var(--ink-soft);
+  border:1px solid var(--rule);padding:.1rem .45rem;border-radius:2px;
+}
+.tag{
+  font-size:.76rem;font-weight:700;
+  border:1.5px solid var(--red);color:var(--red);
+  padding:.12rem .5rem;border-radius:2px;
+}
+
+/* ---------- watch list ---------- */
+ol.watch{list-style:none;counter-reset:w;margin:0;padding:0}
+ol.watch li{
+  counter-increment:w;position:relative;
+  padding:.9rem 0 .9rem 2.9rem;border-bottom:1px solid var(--rule);
+}
+ol.watch li:last-child{border-bottom:none}
+ol.watch li::before{
+  content:counter(w);position:absolute;left:0;top:.95rem;
+  width:1.85rem;height:1.85rem;line-height:1.85rem;text-align:center;
+  border:1.5px solid var(--blue);color:var(--blue);
+  font-weight:900;font-size:.9rem;border-radius:50%;
+}
+ol.watch b{display:block;font-weight:700}
+ol.watch span{display:block;font-size:.92rem;color:var(--ink-soft);margin-top:.15rem}
+
+/* ---------- issues ---------- */
+.issue{border:1px solid var(--rule);padding:1.05rem 1.1rem;margin-bottom:1.1rem}
+.issue-head{display:flex;align-items:baseline;gap:.7rem;margin-bottom:.8rem}
+.issue-no{font-weight:900;font-size:1.45rem;line-height:1}
+.time-wrap{margin-left:auto;display:flex;align-items:baseline;gap:.4rem;font-size:.86rem;color:var(--ink-soft)}
+.time-wrap input{width:5.4rem;text-align:center;padding:.35rem .4rem;font-variant-numeric:tabular-nums}
+.issue .q:last-child{margin-bottom:0}
+.limit{
+  border-left:3px solid var(--red);padding:.15rem 0 .15rem .9rem;
+  font-size:.94rem;color:var(--ink-soft);margin-top:1.2rem;
+}
+
+/* ---------- the gap ---------- */
+.gap{
+  background:var(--rule-hard);color:var(--card);
+  margin:3rem calc(clamp(1.1rem,4vw,2.6rem) * -1) 0;
+  padding:2.6rem clamp(1.1rem,4vw,2.6rem);
+}
+.gap h2{color:var(--card)}
+.gap p{max-width:33rem}
+.gap .quote{
+  border-left:3px solid var(--red);padding-left:1rem;
+  font-weight:700;font-size:1.08rem;margin:1.5rem 0;
+}
+.gap .sub{font-weight:900;font-size:1.02rem;margin:2rem 0 .2rem;color:var(--red)}
+.gap .kicker{font-size:1.15rem;font-weight:900;line-height:1.6;margin-top:1.8rem}
+
+/* ---------- output ---------- */
+.out{margin-top:2.6rem;border-top:2px solid var(--rule-hard);padding-top:2.3rem}
+button{
+  width:100%;font-family:inherit;font-size:1.05rem;font-weight:700;
+  padding:.95rem 1rem;border:none;border-radius:2px;
+  background:var(--rule-hard);color:var(--card);cursor:pointer;
+  transition:opacity .12s ease;
+}
+button:hover{opacity:.86}
+button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.status{text-align:center;font-size:.9rem;color:var(--ink-soft);min-height:1.5rem;margin-top:.7rem}
+.after{font-size:.95rem;color:var(--ink-soft);margin-top:2rem}
+.after b{color:var(--ink)}
+footer{margin-top:3rem;padding-top:1.4rem;border-top:1px solid var(--rule);font-size:.86rem;color:var(--ink-soft);line-height:1.8}
+footer b{color:var(--ink);font-size:.95rem}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{
+  body{background:#fff}
+  .sheet{border:none;max-width:none}
+  .out button,.status{display:none}
+  .gap{background:#fff;color:#000;border:2px solid #000}
+  .gap h2{color:#000}
+  textarea,input{border:1px solid #999}
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <div class="hero">
+    <div class="corner"><i></i><i></i>KN-LINK</div>
+    <h1>実戦振り返り<br>ノート</h1>
+    <p class="sub-title">自分のボクシングを、自分で磨く。</p>
+    <p class="lede">試合でもスパーリングでも、映像を撮って自分で振り返っている人のためのノートです。書いた内容は、そのままコピーして手元に残せます。</p>
+    <div class="first-rule"><span>映像を見る前に、記憶だけで書いてください。</span><br>先に映像を見ると、記憶がそれに上書きされます。残るのは「映像を見た感想」で、やっていたときに自分が何を感じていたかは消えます。<b>感覚が先、映像はあとです。</b></div>
+  </div>
+
+  <section>
+    <h2>この映像について</h2>
+    <div class="meta">
+      <div class="q"><label for="m-date">日付</label><input type="date" id="m-date"></div>
+      <div class="q"><label for="m-kind">種別</label>
+        <select id="m-kind">
+          <option value="">選んでください</option>
+          <option>試合</option>
+          <option>スパーリング</option>
+          <option>練習</option>
+        </select>
+      </div>
+      <div class="q"><label for="m-level">相手は自分より</label>
+        <select id="m-level">
+          <option value="">選んでください</option>
+          <option>上</option>
+          <option>同格</option>
+          <option>下</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>見る前に書く</h2>
+    <p class="note"><b>まだ映像は見ないでください。</b>記憶だけで書きます。一行ずつで大丈夫です。</p>
+
+    <div class="q">
+      <label for="q1">あなたが目指しているボクシング
+        <span class="hint">ここが決まっていないと、課題がただの「良くないことの羅列」になります。</span>
+      </label>
+      <textarea id="q1"></textarea>
+    </div>
+    <div class="q">
+      <label for="q2">今回のテーマ
+        <span class="hint">この日、何を意識して臨んだか。</span>
+      </label>
+      <textarea id="q2"></textarea>
+    </div>
+  </section>
+
+  <section>
+    <h2>実戦の感覚を書く</h2>
+    <p class="note">全体の流れでも、印象に残っている局面でも、書きやすいほうで構いません。</p>
+
+    <div class="q">
+      <label for="f1">今日のボクシングの感覚を書いてください
+        <span class="hint">主導権はどちらにあったか。どこで流れが変わったか。相手はどう変わってきたか。</span>
+      </label>
+      <textarea id="f1" style="min-height:7rem"></textarea>
+    </div>
+    <div class="q">
+      <label for="w1">うまくいったこと、うまくいかなかったこと</label>
+      <textarea id="w1"></textarea>
+    </div>
+  </section>
+
+  <section>
+    <h2>映像で確かめる</h2>
+    <p class="note">ここで初めて映像を開きます。<b>映像を見た感想は要りません。</b>知りたいのは、実戦の感覚と実際が同じだったかどうかです。</p>
+
+    <div class="q">
+      <label for="g1">実戦の感覚と、違ったのはどこですか
+        <span class="hint">同じだったなら「同じだった」で構いません。</span>
+      </label>
+      <textarea id="g1"></textarea>
+    </div>
+    <div class="q">
+      <label for="c1">改善するには、次はどうすればいいと思いますか
+        <span class="hint">うまくいった部分は、次も同じように出すために何をしますか。</span>
+      </label>
+      <textarea id="c1"></textarea>
+    </div>
+    <div class="q">
+      <label for="n1">具体的なアクションプランを書いてください
+        <span class="hint">次の練習で、実際に何をやるか。</span>
+      </label>
+      <textarea id="n1"></textarea>
+    </div>
+  </section>
+
+  <div class="gap">
+    <h2>ズレを見つける</h2>
+    <p>ここまでで、2つのことを書きました。<b>実戦の感覚</b>と、<b>映像で確かめたこと</b>。この2つが違っていたなら、それがズレです。自分を客観的に見るというのは、この作業のことです。</p>
+
+    <p class="sub">映像で見つかるズレ</p>
+    <div class="quote">主導権を握れていたと思っていた。実際は握られていた。<br>前に出ていたつもりが、下がっていた。<br>組み立てたつもりが、打ち合いになっていた。</div>
+    <p>これは自分で見つけられます。今日やったのが、その作業です。</p>
+
+    <p class="sub">映像では見つからないズレ</p>
+    <div class="quote">「次はこうする」と書いた、その方向が合っているか。</div>
+    <p>映像に映っているのは、起きたことだけです。<b>これからやることが正しい方向を向いているかは、どこにも映っていません。</b></p>
+    <p>そして、伸びるかどうかを決めるのは後者です。何が起きたかを正確に知っても、次の一手が違う方向を向いていれば、練習するほど遠ざかります。<b>分析しているぶん、速く遠ざかります。</b></p>
+    <p class="kicker">さっき書いた「次はこうする」が、<br>これからの数ヶ月を決めます。</p>
+  </div>
+
+  <div class="out">
+    <button id="copy">書いた内容をコピーして残す</button>
+    <p class="status" id="status" role="status"></p>
+    <p class="after">コピーした内容は、メモアプリや自分宛のLINEに貼って残しておいてください。<b>次に撮ったときに、もう一度書いて、前回と見比べる</b>のがこのノートの本来の使い方です。<br><br>
+    毎回、同じところに差分が出ていたら、そこが自分では直せていない部分です。<b>そして、差分が出た理由までは自分では分かりません。</b>そこを知りたくなったら、映像とこのノートを送ってください。私の見立てをお返しします。</p>
+  </div>
+
+  <footer>
+    <b>中野敬太</b>｜ボクシングコーチ／KN-LINK<br>
+    プロ35戦、日本ランキング入り。10カ国以上で、選手から一般の方まで3,000人以上を指導。海外の試合では、セコンド・通訳・コーディネートを務めています。
+    <br><br>
+    入力した内容はこの端末にのみ保存され、送信されません。
+  </footer>
+</div>
+
+<script>
+(function(){
+  var ids=["m-date","m-kind","m-level","q1","q2","f1","w1","g1","c1","n1"];
+  var KEY="knlink-self-sheet-v7";
+
+  try{
+    var saved=localStorage.getItem(KEY);
+    if(saved){
+      var d=JSON.parse(saved);
+      ids.forEach(function(id){ if(d[id]){ var e=document.getElementById(id); if(e) e.value=d[id]; } });
+    }
+  }catch(e){}
+
+  function save(){
+    try{
+      var d={}; ids.forEach(function(id){ var e=document.getElementById(id); if(e) d[id]=e.value; });
+      localStorage.setItem(KEY,JSON.stringify(d));
+    }catch(e){}
+  }
+  ids.forEach(function(id){
+    var e=document.getElementById(id);
+    if(e){ e.addEventListener("input",save); e.addEventListener("change",save); }
+  });
+
+  function v(id){ var e=document.getElementById(id); return e && e.value.trim() ? e.value.trim() : "（未記入）"; }
+
+  function build(){
+    var L=[];
+    var dt=document.getElementById("m-date").value.trim();
+    var kd=document.getElementById("m-kind").value.trim();
+    var lv=document.getElementById("m-level").value.trim();
+    L.push("■ この映像について");
+    L.push("日付： "+(dt||"（未記入）")+"　種別： "+(kd||"（未記入）")+"　相手は自分より： "+(lv||"（未記入）"));
+    L.push("");
+    L.push("■ 映像を見る前に書いたこと");
+    L.push("目指しているボクシング： "+v("q1"));
+    L.push("今回のテーマ： "+v("q2"));
+    L.push("");
+    L.push("■ 実戦の感覚");
+    L.push("今日のボクシングの感覚： "+v("f1"));
+    L.push("うまくいったこと・いかなかったこと： "+v("w1"));
+    L.push("");
+    L.push("■ 映像で確かめて");
+    L.push("実戦の感覚と違ったところ： "+v("g1"));
+    L.push("改善するには： "+v("c1"));
+    L.push("アクションプラン： "+v("n1"));
+    return L.join("\n").trim();
+  }
+
+  var btn=document.getElementById("copy"), st=document.getElementById("status");
+  btn.addEventListener("click",function(){
+    var text=build();
+    function ok(){ st.textContent="コピーしました。メモや自分宛のLINEに貼って残せます。"; }
+    function ng(){ st.textContent="コピーできませんでした。下の内容を選んで手動でコピーしてください。"; showFallback(text); }
+    if(navigator.clipboard && window.isSecureContext){
+      navigator.clipboard.writeText(text).then(ok).catch(ng);
+    }else{
+      try{
+        var ta=document.createElement("textarea");
+        ta.value=text; ta.style.position="fixed"; ta.style.opacity="0";
+        document.body.appendChild(ta); ta.select();
+        document.execCommand("copy"); document.body.removeChild(ta); ok();
+      }catch(e){ ng(); }
+    }
+  });
+
+  function showFallback(text){
+    if(document.getElementById("fb")) { document.getElementById("fb").value=text; return; }
+    var ta=document.createElement("textarea");
+    ta.id="fb"; ta.value=text; ta.style.marginTop="1rem"; ta.style.minHeight="14rem";
+    document.querySelector(".out").appendChild(ta);
+  }
+})();
+</script>
+</body>
+</html>
