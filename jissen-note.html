@@ -177,7 +177,19 @@ button{
 }
 button:hover{opacity:.86}
 button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
-.status{text-align:center;font-size:.9rem;color:var(--ink-soft);min-height:1.5rem;margin-top:.7rem}
+.btn-lead{font-size:.93rem;color:var(--ink-soft);margin:0 0 .9rem}
+.btn-lead b{color:var(--ink)}
+.btn-row{display:flex;gap:.6rem;flex-wrap:wrap}
+.btn-row button{flex:1 1 12rem}
+button.secondary{background:transparent;color:var(--ink);border:1.5px solid var(--rule-hard)}
+button.secondary.armed{background:var(--red);color:#FFFFFF;border-color:var(--red)}
+.prev-notice{
+  border:2px solid var(--red);color:var(--ink);
+  padding:.85rem 1rem;margin-bottom:1.4rem;font-size:.95rem;line-height:1.7;
+}
+.fb-wrap{margin-top:1rem}
+.fb-close{margin-top:.5rem;background:transparent;color:var(--ink-soft);border:1px solid var(--rule);font-size:.9rem;font-weight:400;padding:.5rem}
+.status{text-align:center;font-size:.95rem;font-weight:700;color:var(--ink);min-height:1.5rem;margin-top:.9rem}
 .after{font-size:.95rem;color:var(--ink-soft);margin-top:2rem}
 .after b{color:var(--ink)}
 .offer{
@@ -215,6 +227,7 @@ footer b{color:var(--ink);font-size:.95rem}
     <h1>実戦振り返り<br>ノート</h1>
     <p class="sub-title">自分のボクシングを、自分で磨く。</p>
     <p class="lede">試合でもスパーリングでも、映像を撮って自分で振り返っている人のためのノートです。書いた内容は、そのままコピーして手元に残せます。</p>
+    <div class="prev-notice" id="prev-notice" hidden>前回書いた内容が残っています。<b>先にコピーして残してから、消して新しく書いてください。</b>コピーのボタンは、いちばん下にあります。</div>
     <div class="first-rule"><span>映像を見る前に、記憶だけで書いてください。</span><br>先に映像を見ると、記憶がそれに上書きされます。残るのは「映像を見た感想」で、やっていたときに自分が何を感じていたかは消えます。<b>感覚が先、映像はあとです。</b></div>
   </div>
 
@@ -315,13 +328,16 @@ footer b{color:var(--ink);font-size:.95rem}
   </div>
 
   <div class="out">
-    <button id="copy">書いた内容をコピーして残す</button>
+    <p class="btn-lead">次に書くときは、この内容を消して書きます。<b>消す前に、コピーして残してください。</b></p>
+    <div class="btn-row">
+      <button id="copy">内容をコピーする</button>
+      <button id="clear" class="secondary">消して、新しく書く</button>
+    </div>
     <p class="status" id="status" role="status"></p>
-    <p class="after">コピーした内容は、メモアプリや自分宛のLINEに貼って残しておいてください。<b>次に撮ったときに、もう一度書いて、前回と見比べる</b>のがこのノートの本来の使い方です。<br><br>
-    毎回、同じところに差分が出ていたら、そこが自分では直せていない部分です。<b>そして、差分が出た理由までは自分では分かりません。</b></p>
+    <p class="after"><b>次に撮ったときに、もう一度書いて、前回と見比べる</b>のがこのノートの本来の使い方です。毎回、同じところに差分が出ていたら、そこが自分では直せていない部分です。<b>そして、差分が出た理由までは自分では分かりません。</b></p>
 
     <div class="offer">
-      <h3>見立てが欲しくなったら</h3>
+      <h3>中野敬太が、あなたの映像を見ます</h3>
       <p>映像とこのノートを送ってください。次の4つをお返しします。</p>
       <ul>
         <li>最大3つの課題</li>
@@ -367,6 +383,14 @@ footer b{color:var(--ink);font-size:.95rem}
     if(e){ e.addEventListener("input",save); e.addEventListener("change",save); }
   });
 
+  function hasContent(){
+    return ids.some(function(id){ var e=document.getElementById(id); return e && e.value.trim()!==""; });
+  }
+  if(hasContent()){
+    var pn=document.getElementById("prev-notice");
+    if(pn) pn.hidden=false;
+  }
+
   function v(id){ var e=document.getElementById(id); return e && e.value.trim() ? e.value.trim() : "（未記入）"; }
 
   function build(){
@@ -395,8 +419,8 @@ footer b{color:var(--ink);font-size:.95rem}
   var btn=document.getElementById("copy"), st=document.getElementById("status");
   btn.addEventListener("click",function(){
     var text=build();
-    function ok(){ st.textContent="コピーしました。メモや自分宛のLINEに貼って残せます。"; }
-    function ng(){ st.textContent="コピーできませんでした。下の内容を選んで手動でコピーしてください。"; showFallback(text); }
+    function ok(){ removeFallback(); st.textContent="コピーしました。ご自身のメモに転記してください。"; }
+    function ng(){ st.textContent="下に内容を出しました。ご自身のメモに転記してください。"; showFallback(text); }
     if(navigator.clipboard && window.isSecureContext){
       navigator.clipboard.writeText(text).then(ok).catch(ng);
     }else{
@@ -409,11 +433,50 @@ footer b{color:var(--ink);font-size:.95rem}
     }
   });
 
+  var clr=document.getElementById("clear");
+  var armed=false, armTimer=null;
+  var CLR_LABEL="消して、新しく書く";
+
+  function disarm(){
+    armed=false; clr.textContent=CLR_LABEL; clr.classList.remove("armed");
+    if(armTimer){ clearTimeout(armTimer); armTimer=null; }
+  }
+
+  clr.addEventListener("click",function(){
+    if(!armed){
+      armed=true;
+      clr.textContent="本当に消す（もう一度押す）";
+      clr.classList.add("armed");
+      st.textContent="コピーは済んでいますか。もう一度押すと消えます。";
+      armTimer=setTimeout(function(){ disarm(); st.textContent=""; }, 8000);
+      return;
+    }
+    ids.forEach(function(id){ var e=document.getElementById(id); if(e) e.value=""; });
+    try{ localStorage.removeItem(KEY); }catch(e){}
+    var pn=document.getElementById("prev-notice"); if(pn) pn.hidden=true;
+    removeFallback();
+    disarm();
+    st.textContent="消しました。上から書きはじめてください。";
+    window.scrollTo({top:0,behavior:"smooth"});
+  });
+
+  function removeFallback(){
+    var w=document.getElementById("fb-wrap");
+    if(w) w.remove();
+  }
+
   function showFallback(text){
-    if(document.getElementById("fb")) { document.getElementById("fb").value=text; return; }
+    var existing=document.getElementById("fb");
+    if(existing){ existing.value=text; return; }
+    var wrap=document.createElement("div");
+    wrap.id="fb-wrap"; wrap.className="fb-wrap";
     var ta=document.createElement("textarea");
-    ta.id="fb"; ta.value=text; ta.style.marginTop="1rem"; ta.style.minHeight="14rem";
-    document.querySelector(".out").appendChild(ta);
+    ta.id="fb"; ta.value=text; ta.style.minHeight="14rem";
+    var close=document.createElement("button");
+    close.type="button"; close.className="fb-close"; close.textContent="閉じる";
+    close.addEventListener("click",function(){ removeFallback(); st.textContent=""; });
+    wrap.appendChild(ta); wrap.appendChild(close);
+    document.querySelector(".out").appendChild(wrap);
   }
 })();
 </script>
