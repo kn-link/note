@@ -180,6 +180,19 @@ button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
 .status{text-align:center;font-size:.9rem;color:var(--ink-soft);min-height:1.5rem;margin-top:.7rem}
 .after{font-size:.95rem;color:var(--ink-soft);margin-top:2rem}
 .after b{color:var(--ink)}
+.offer{
+  margin-top:2.2rem;border:2px solid var(--rule-hard);
+  padding:1.4rem clamp(1rem,3vw,1.5rem);
+}
+.offer h3{font-size:1.15rem;font-weight:900;margin:0 0 .7rem}
+.offer p{margin:0 0 .7rem;font-size:.97rem}
+.offer ul{margin:0 0 1rem;padding-left:1.1rem}
+.offer li{font-size:.97rem;margin-bottom:.25rem}
+.offer .price{
+  font-weight:900;font-size:1.05rem;
+  border-top:1px solid var(--rule);padding-top:.9rem;margin-bottom:.4rem;
+}
+.offer .dest{font-size:.9rem;color:var(--ink-soft);margin:0}
 footer{margin-top:3rem;padding-top:1.4rem;border-top:1px solid var(--rule);font-size:.86rem;color:var(--ink-soft);line-height:1.8}
 footer b{color:var(--ink);font-size:.95rem}
 
@@ -305,7 +318,20 @@ footer b{color:var(--ink);font-size:.95rem}
     <button id="copy">書いた内容をコピーして残す</button>
     <p class="status" id="status" role="status"></p>
     <p class="after">コピーした内容は、メモアプリや自分宛のLINEに貼って残しておいてください。<b>次に撮ったときに、もう一度書いて、前回と見比べる</b>のがこのノートの本来の使い方です。<br><br>
-    毎回、同じところに差分が出ていたら、そこが自分では直せていない部分です。<b>そして、差分が出た理由までは自分では分かりません。</b>そこを知りたくなったら、映像とこのノートを送ってください。私の見立てをお返しします。</p>
+    毎回、同じところに差分が出ていたら、そこが自分では直せていない部分です。<b>そして、差分が出た理由までは自分では分かりません。</b></p>
+
+    <div class="offer">
+      <h3>見立てが欲しくなったら</h3>
+      <p>映像とこのノートを送ってください。次の4つをお返しします。</p>
+      <ul>
+        <li>最大3つの課題</li>
+        <li>それぞれ、なぜ起きているか</li>
+        <li>次の練習でやること</li>
+        <li>あなたの見立てと、どこが違ったか</li>
+      </ul>
+      <p class="price">1本 11,000円／3日以内にお返しします</p>
+      <p class="dest">送り先は、このノートを受け取ったLINEのトークです。</p>
+    </div>
   </div>
 
   <footer>
